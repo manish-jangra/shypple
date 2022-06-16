@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shypple
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+      - name: shypple
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "512m"

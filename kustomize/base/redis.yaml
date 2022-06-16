@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis
+  name: redis
+spec:
+  ports:
+  - name: 6379-tcp
+    port: 6379
+  selector:
+    deployment: redis
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pv-claim
+  labels:
+    app: redis
+    deployment: redis
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: redis
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: redis
+  template:
+    metadata:
+      labels:
+        deployment: redis
+    spec:
+      containers:
+      - image: redis:latest
+        imagePullPolicy: IfNotPresent
+        name: redis
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+        startupProbe:
+          tcpSocket:
+            port: 6379
+          initialDelaySeconds: 10
+          timeoutSeconds: 3
+        readinessProbe:
+          exec:
+            command:
+            - "/bin/sh"
+            - "-c"
+            - "redis-cli"
+          timeoutSeconds: 5
+        livenessProbe:
+          exec:
+            command:
+            - "/bin/sh"
+            - "-c"
+            - "redis-cli"
+          timeoutSeconds: 5
+        volumeMounts:
+        - name: redis-persistent-storage
+          mountPath: /var/lib/redis/data
+      restartPolicy: Always
+      volumes:
+      - name: redis-persistent-storage
+        persistentVolumeClaim:
+          claimName: redis-pv-claim

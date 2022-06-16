@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shypple
+spec:
+  replicas: 5
+  template:
+    spec:
+      containers:
+      - name: shypple
+        env:
+        - name: REDIS_HOST
+          value: "redis connection string"  # Replace it with the redis connection string while using redis as a managed service in cloud
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"

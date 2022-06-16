@@ -1,0 +1,14 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: shypple
+  name: shypple
+spec:
+  host: shypple.wildcard-domain-name-of cluster.com
+  port:
+    targetPort: 8000-tcp
+  to:
+    kind: Service
+    name: shypple
+    weight: 100
