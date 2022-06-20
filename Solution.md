@@ -81,3 +81,5 @@ spec:
 
 #### Application Architecture for GCP
 ![Application Architecture in GCP](app.png)
+
+Redis is a managed service offered by GCP in above diagram. Which is a recommended practive while using public cloud platform. It's highly recommended to use **statefulsets** while using on-prem Kubernetes Cluster.  
