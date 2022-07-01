@@ -14,4 +14,4 @@ WORKDIR $APP_HOME
 COPY ./src/ /code/app
 RUN pip install -r /code/app/requirements.txt
 EXPOSE 8000
-ENTRYPOINT ["uvicorn", "main:app", "--reload"]
+ENTRYPOINT ["uvicorn", "main:app", "--host=0.0.0.0" "--reload"]
